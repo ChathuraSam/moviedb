@@ -1,4 +1,7 @@
-
+<?php
+	require_once '../conf/conf.php';
+	require_once '../func/get-comments.php';
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -59,11 +62,51 @@
 		echo "$story";
 	?>
 
-	<a href="AddComment.php?">
+	<a href="AddComment.php?movieId=''">
 		<button>Add Comment</button>
 	</a>
+
+	<?php
+		$movieId = str_replace( "'", "", $_GET['movieId'] );  // Here use this function to remove single quotes.
+		echo "<br>$movieId<br>";
+		$commentList = array();
+		$commentList = getSpecificComments($conn, $movieId);
+
+		if ($commentList == null) {
+			echo "No comments";
+		}
+
+		foreach ($commentList as $key => $value) {
+			$user = $value['user'];
+			$comment = $value['comment'];
+			$dateTime = $value['dateandtime'];
+			echo "
+
+			<table border=\"1\" style=\"margin-top: 10px\">
+					<tr>
+						<td>
+							By $user
+						</td>
+					</tr>
+					<tr>
+						<td>
+							$comment
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Commsnted on $dateTime
+						</td>
+					</tr>
+				</table>
+			";
+		}
+		// Have to Load Comments Here
+	?>
+
 	
-	
+
+
 </body>
 </html>
 
